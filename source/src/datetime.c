@@ -127,14 +127,12 @@ ceil(double x)
 #endif
 
 /* MSVC and unixes w/o rint */
-#if defined(PQT_MSVC) || (defined(HAVE_CONFIG_H) && !defined(HAVE_RINT))
+#if !defined(_MSC_VER) && (defined(HAVE_CONFIG_H) && !defined(HAVE_RINT))
 static double
 rint(double x)
 {
 	double f, n = 0.;
-
 	f = modf(x, &n);
-
 	if (x > 0.)
 	{
 		if (f > .5)
@@ -145,10 +143,10 @@ rint(double x)
 		if (f < -.5)
 			n -= 1.;
 	}
-
 	return n;
 }
 #endif
+
 
 /*
  * time:   PGtime members must be set: hour, min, sec, usec.
